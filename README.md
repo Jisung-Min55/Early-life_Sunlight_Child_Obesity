@@ -3,12 +3,12 @@
 This repository reproduces the data construction pipeline for my project, "The Impact of Early-life Sunlight Exposure on Child Obesity" using the Panel Study on Korean Children data, district boundary data, and meteorological data.
 
 ## What this repository does
-1) **Build a long PSKC panel (Stata)** by keeping non-movers through Wave 3 and dropping foster kids from the dataset.  
-2) **Compute SIGUNGU “center” coordinates (Python)** from administrative boundary polygons  
-   - outputs both **centroids** and **representative points** (points guaranteed inside polygons)
+1) **Build a long PSKC panel (in Stata)** by keeping non-movers through Wave 3 and dropping foster kids from the dataset.  
+2) **Compute region (SIGUNGU) “center” coordinates (in Python)** from administrative boundary polygons  
+   - outputs both **centroids** (geographical centers) and **representative points** (points guaranteed inside polygons)
    - constructs a merge key `resid_area` (e.g., `서울특별시/강동구`, `경상북도/포항시/남구`)
-3) **Match each SIGUNGU to its nearest weather station (Python)** (meters-based CRS, EPSG:5179)
-4) **Merge weather and construct exposure variables (Stata)**
+3) **Match each SIGUNGU to its nearest weather station for each day (in Python)** (meters-based CRS, EPSG:5179)
+4) **Merge the PSKC panel and the weather dataset (in Stata)**
 
 ## Repository layout
 - `code/stata/` : Stata scripts (panel construction, merges, exposure variables)
