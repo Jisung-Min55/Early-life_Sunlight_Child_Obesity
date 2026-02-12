@@ -29,16 +29,19 @@ This repository reproduces the data construction pipeline for my project
 ---
 
 ## Repository layout
+<details>
+<summary><b>Repository structure</b></summary>
+
+```text
 code/
-  stata/ Stata do-files for panel construction and merges
-  python/ Python scripts for geospatial preprocessing and station matching
+  stata/        Stata do-files (panel construction, merges, exposure variables)
+  python/       Python scripts (SIGUNGU centers, station matching)
 data/
-  raw/ Raw inputs (NOT committed)
-  derived/ Intermediate outputs (NOT committed)
-  processed/ Final analysis-ready datasets (NOT committed)
+  raw/          Raw inputs (NOT committed)
+  derived/      Intermediate outputs (NOT committed)
+  processed/    Final analysis-ready datasets (NOT committed)
 outputs/
-  logs/ Logs (NOT committed)
-docs/
+  logs/         Logs (NOT committed)
 
 ---
 
