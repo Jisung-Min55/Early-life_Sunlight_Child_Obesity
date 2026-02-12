@@ -8,11 +8,11 @@ This repository reproduces the data construction pipeline for my project
 - **Korea Meteorological Administration** (KMA) station metadata + daily sunshine (일조시간) records
 
 > **Data note:** PSKC and KMA raw files are **not** redistributed in this repository.  
-> The pipeline can be reproduced by downloading the public data from the official portals (registration, acceptance of the providers’ terms, submitting a proposal and such may be required) and placing the inputs in data/raw/ as described below.”
+> The pipeline can be reproduced by downloading the data from the official portals (registration, acceptance of the providers’ terms, submitting a proposal and such may be required) and placing the inputs in data/raw/ as described below.
 
 ---
 
-## What this repo produces
+## What this repository produces
 
 ### Core steps
 1. **Construct an analysis panel (Stata)**  
@@ -30,10 +30,9 @@ This repository reproduces the data construction pipeline for my project
 
 ## Repository layout
 <details>
-<summary><b>Repository structure</b></summary>
+  <summary><b>Repository structure</b></summary>
 
-```text
-code/
+  <pre><code>code/
   stata/        Stata do-files (panel construction, merges, exposure variables)
   python/       Python scripts (SIGUNGU centers, station matching)
 data/
@@ -42,8 +41,8 @@ data/
   processed/    Final analysis-ready datasets (NOT committed)
 outputs/
   logs/         Logs (NOT committed)
-
-</details> ```
+</code></pre>
+</details>
 
 ---
 
@@ -68,7 +67,7 @@ Place the following under `data/raw/`:
 ## Outputs
 
 Intermediate (examples):
-- `data/derived/PSKC_long_w1to7_nomove_until_w3_dropfoster.dta'
+- `data/derived/PSKC_long_w1to7_nomove_until_w3_dropfoster.dta`
 - `data/derived/sigungu2010_centers_UTMK.csv`
 - `data/derived/sigungu2010_centers_UTMK.dta`
 - `data/derived/sigungu_daily_sunlight_20070601_20110831.csv`
@@ -93,17 +92,25 @@ Final (example):
 ## How to run
 
 ### 0) Create expected folders
-Create (if they do not exist):
+Create:
 - `data/raw/`, `data/derived/`, `data/processed/`, `outputs/logs/`
 
-### 1) Stata -- build the analysis panel
-do "code/stata/01_build_panel.do"
+### 1) Stata - build the analysis panel
+```stata
+do "code/stata/Building_Long.do"
+```
 
-### 2) Python -- compute SIGUNGU centers
+### 2) Python - compute SIGUNGU centers
+```bash
 python "code/python/sigungu_center.py"
+```
 
-### 3) Python -- daily nearest-station assignment + sunshine attachment
+### 3) Python - daily nearest-station assignment + sunshine attachment
+```bash
 python "code/python/assign_nearest_station_dynamic_200706_201108.py"
+```
 
-### 4) Stata -- merge PSKC with weather outputs and build exposure measures
-do "code/stata/02_merge_weather.do"
+### 4) Stata - merge PSKC with weather outputs and build exposure measures
+```stata
+do "code/stata/Merging_PSKC_and_Weather.do"
+```
