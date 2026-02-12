@@ -43,6 +43,8 @@ data/
 outputs/
   logs/         Logs (NOT committed)
 
+</details> ```
+
 ---
 
 ## Inputs (not committed)
