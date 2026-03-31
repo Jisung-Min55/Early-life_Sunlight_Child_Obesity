@@ -7,26 +7,39 @@ clear all
 set more off
 
 ****************************************************
-* PATHS
+* PATHS: edit ONLY this section
 ****************************************************
-global PROJ      "C:\Users\jaspe\OneDrive\Desktop\Research\Projects\Sunlight_ChildObesity"
-global DERIVED   "$PROJ\derived"
-global PROCESSED "$PROJ\processed"
+global PROJROOT "C:/Users/jaspe/OneDrive/Desktop/Research/Projects/Sunlight_ChildObesity"
+
+global CODE        "${PROJROOT}/code"
+global RAWDATA     "${PROJROOT}/data/raw"
+global DERIVED     "${PROJROOT}/data/derived"
+global PROCESSED   "${PROJROOT}/data/processed"
+global LOGS        "${PROJROOT}/outputs/logs"
+
+cap mkdir "${DERIVED}"
+cap mkdir "${PROCESSED}"
+cap mkdir "${LOGS}"
 
 * Inputs
-global CENTERS   "$DERIVED\sigungu2010_centers_UTMK.csv"
-global SUN_DAILY "$DERIVED\sigungu_daily_sunlight_20070601_20110831.dta"
-global KCPS_IN   "$DERIVED\KCPS_long_w1to7_nomove_until_w3_dropfoster.dta"
+global CENTERS     "${DERIVED}/sigungu2010_centers_UTMK.csv"
+global SUN_DAILY   "${DERIVED}/sigungu_daily_sunlight_20070601_20110831.dta"
+global KCPS_IN     "${DERIVED}/PSKC_long_w1to7_nomove_until_w3_dropfoster.dta"
 
-* Output (FINAL)
-global KCPS_OUT  "$PROCESSED\analysis_ready_PSKC.dta"
+* Final output
+global KCPS_OUT    "${PROCESSED}/analysis_ready_PSKC.dta"
+
+* External reference file
+global KDCA_XLS    "${RAWDATA}/Child_Growth.xls"
 
 * Assumed DOB day within month (baseline = 15)
 local DOBDAY = 15
 
+cap log close _all
+log using "${LOGS}/Merging_PSKC_and_Weather.log", replace text
 
 ****************************************************
-* 0) Save FULL KCPS data first (so we never lose variables)
+* 0) Save FULL KCPS data first
 ****************************************************
 use "$KCPS_IN", clear
 tempfile KCPS_FULL
@@ -339,10 +352,9 @@ label var agemos "Age in months (floor) for KDCA merge"
 *
 * The reference file can be accessed at "https://knhanes.kdca.go.kr/knhanes/grtcht/dwnld/dtLst.do"
 * -------------------------------
-local KDCA_XLS "C:\Users\jaspe\OneDrive\Desktop\Data\Child_Growth\Child_Growth.xls"
 
 preserve
-    import excel using "`KDCA_XLS'", ///
+    import excel using "${KDCA_XLS}", ///
         sheet("연령별 체질량지수") cellrange(A3:S410) clear
 
     * Stata names columns A B C ... Q R S
@@ -377,6 +389,6 @@ label var obese_kdca      "Obesity (KDCA BMI cutoff)"
 * 9) Save the outcome
 ****************************************************
 
-* Save to PROCESSED (absolute path)
-save "$KCPS_OUT", replace
-display as text "Saved final dataset to: $KCPS_OUT"
+save "${KCPS_OUT}", replace
+display as text "Saved final dataset to: ${KCPS_OUT}"
+log close
