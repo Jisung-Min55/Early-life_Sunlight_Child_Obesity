@@ -3,8 +3,8 @@
 This do-file processes datasets required for the baseline analysis in the following order:
 Build KCPS long panel (waves 1-7), keep non-movers through wave 3, and drop foster children (waves 1-4)
 
-Inputs: w1(2008).dta ... w7(2014).dta	(in ${DATA_ROOT}\PSKC\Data)
-Output:  KCPS_long_w1to7_nomove_until_w3_dropfoster.dta (in ${DATA_ROOT}\derived)
+Inputs: w1(2008).dta ... w7(2014).dta	(in ${PROJROOT}/data/raw)
+Output:  KCPS_long_w1to7_nomove_until_w3_dropfoster.dta (in ${PROJROOT}/data/derived)
 
 *************************************************************************************************************/
 
@@ -12,29 +12,25 @@ version 19.5
 clear all
 set maxvar 120000
 
-*-----------------------------*
-* 0) Paths 				      
-*-----------------------------*
+*---------------------------------------------*
+* 0) Paths: Edit ONLY this section				      
+*---------------------------------------------*
+global PROJROOT "C:/Users/jaspe/OneDrive/Desktop/Research/Projects/Early-life_Sunlight_Child_Obesity"
 
-global DATA_ROOT "C:\Users\jaspe\OneDrive\Desktop\Data"
-global PROJ_ROOT "C:\Users\jaspe\OneDrive\Desktop\Research\Projects\Sunlight_ChildObesity"
+global CODE        "${PROJROOT}/code"
+global RAWDATA     "${PROJROOT}/data/raw"
+global DERIVED     "${PROJROOT}/data/derived"
+global PROCESSED   "${PROJROOT}/data/processed"
+global LOGS        "${PROJROOT}/outputs/logs"
 
-global raw     "${DATA_ROOT}\PSKC\Data"
-global weather "${DATA_ROOT}\Weather"
-
-global do      "${PROJ_ROOT}\do"
-global derived "${PROJ_ROOT}\derived"
-global output  "${PROJ_ROOT}\output"
-global logs    "${PROJ_ROOT}\logs"
-
-cap mkdir "${derived}"
-cap mkdir "${output}"
-cap mkdir "${logs}"
+cap mkdir "${DERIVED}"
+cap mkdir "${PROCESSED}"
+cap mkdir "${LOGS}"
 
 * Logging
 
 cap log close _all
-log using "${logs}\build.log", replace text
+log using "${LOGS}/Building_Long.log", replace text
 
 
 *--------------------------------------------------------*
@@ -52,7 +48,7 @@ foreach f of local files {
     local ++W
 
     * Load wave file
-    use "${raw}/`f'", clear
+    use "${RAW}/`f'", clear
     gen wave = `W'
 
     * Pick the district variable for this wave
@@ -164,5 +160,5 @@ drop nonresp ever_attrit
 *----------------------------------------------*
 cap noisily isid N_ID wave
 
-save "${derived}\PSKC_long_w1to7_nomove_until_w3_dropfoster.dta", replace
+save "${DERIVED}/PSKC_long_w1to7_nomove_until_w3_dropfoster.dta", replace
 log close
