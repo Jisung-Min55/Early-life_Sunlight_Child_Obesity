@@ -13,34 +13,40 @@ import pandas as pd
 from shapely.geometry import shape as shapely_shape  # if necessary: pip install shapely
 from pyproj import Transformer  # if necessary: pip install pyproj
 
+from pathlib import Path
 
 # ======================
 # 0. Paths
 # ======================
-zip_path = r"C:\Users\jaspe\OneDrive\Desktop\Data\Admin_Regions\bnd_sigungu_00_2010_4Q.zip"
-extract_dir = r"C:\Users\jaspe\OneDrive\Desktop\Research\Projects\Sunlight_ChildObesity\derived\_sigungu2010_extract"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-# Output filenames
-out_csv_name = "sigungu2010_centers_UTMK.csv"
-out_dta_name = "sigungu2010_centers_UTMK.dta"
+RAW_DIR = PROJECT_ROOT / "data" / "raw"
+DERIVED_DIR = PROJECT_ROOT / "data" / "derived"
 
+ZIP_PATH = RAW_DIR / "admin_regions" / "bnd_sigungu_00_2010_4Q.zip"
+EXTRACT_DIR = DERIVED_DIR / "_sigungu2010_extract"
+
+OUT_CSV = DERIVED_DIR / "sigungu2010_centers_UTMK.csv"
+OUT_DTA = DERIVED_DIR / "sigungu2010_centers_UTMK.dta"
 
 # ============================================================
 # 1) Unzip
 # ============================================================
-os.makedirs(extract_dir, exist_ok=True)
-with zipfile.ZipFile(zip_path, "r") as z:
-    z.extractall(extract_dir)
+DERIVED_DIR.mkdir(parents=True, exist_ok=True)
+EXTRACT_DIR.mkdir(parents=True, exist_ok=True)
+
+with zipfile.ZipFile(ZIP_PATH, "r") as z:
+    z.extractall(EXTRACT_DIR)
 
 # Auto-find a .shp file
 shp_candidates = []
-for root, _, files in os.walk(extract_dir):
+for root, _, files in os.walk(EXTRACT_DIR):
     for f in files:
         if f.lower().endswith(".shp"):
             shp_candidates.append(os.path.join(root, f))
 
 if not shp_candidates:
-    raise FileNotFoundError(f"No .shp file found under: {extract_dir}")
+    raise FileNotFoundError(f"No .shp file found under: {EXTRACT_DIR}")
 
 # Prefer a file that looks like bnd_sigungu_00_2010 if multiple exist
 preferred = [p for p in shp_candidates if "bnd_sigungu_00_2010" in os.path.basename(p).lower()]
@@ -163,14 +169,8 @@ print("Example keys:\n", df[["SIGUNGU_CD", "SIGUNGU_NM", "resid_area"]].head(10)
 # ==================
 # 6) Export the files
 # ==================
-out_dir = os.path.dirname(extract_dir)
-out_csv = os.path.join(out_dir, out_csv_name)
-out_dta = os.path.join(out_dir, out_dta_name)
+df.to_csv(OUT_CSV, index=False, encoding="utf-8-sig")
+df.to_stata(OUT_DTA, write_index=False, version=118)
 
-df.to_csv(out_csv, index=False, encoding="utf-8-sig")
-
-# Note: pandas build doesn't accept encoding=... for to_stata()
-df.to_stata(out_dta, write_index=False, version=118)
-
-print("Wrote:", out_csv)
-print("Wrote:", out_dta)
+print("Wrote:", OUT_CSV)
+print("Wrote:", OUT_DTA)
