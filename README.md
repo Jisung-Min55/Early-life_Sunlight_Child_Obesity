@@ -7,6 +7,9 @@ This repository reproduces the data construction pipeline for my project
 - **Korean administrative boundaries** (City,County,District(SIGUNGU) polygons)
 - **Korea Meteorological Administration** (KMA) station metadata + daily sunshine records
 
+> **Data note:** PSKC and KMA raw files are **not** redistributed in this repository.  
+> The pipeline can be reproduced by downloading the data from the official portals (registration, acceptance of the providers’ terms, submitting a proposal and such may be required) and placing the inputs in data/raw/ as described below.
+
 ## Main tasks
 - Construct region-level geographic reference points
 - Assign each region to the nearest active weather station by day
@@ -16,9 +19,6 @@ This repository reproduces the data construction pipeline for my project
 ## Main tools
 - Python: geospatial processing, station assignment, exposure construction
 - Stata: panel construction, merging, sample restrictions, final analysis datasets
-
-> **Data note:** PSKC and KMA raw files are **not** redistributed in this repository.  
-> The pipeline can be reproduced by downloading the data from the official portals (registration, acceptance of the providers’ terms, submitting a proposal and such may be required) and placing the inputs in data/raw/ as described below.
 
 ---
 
