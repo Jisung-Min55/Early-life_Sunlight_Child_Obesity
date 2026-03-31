@@ -39,15 +39,21 @@ import numpy as np
 import pandas as pd
 from pyproj import Transformer
 
+from pathlib import Path
 
 # =========================
 # PATHS
 # =========================
-CENTERS_PATH = r"C:\Users\jaspe\OneDrive\Desktop\Research\Projects\Sunlight_ChildObesity\derived\sigungu2010_centers_UTMK.csv"
-SUNLIGHT_PATH = r"C:\Users\jaspe\OneDrive\Desktop\Data\Weather\Sunlight_(Jun2007-Aug2011).csv"
-STATION_META_PATH = r"C:\Users\jaspe\OneDrive\Desktop\Data\Weather\META_weather_station_data.csv"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-OUT_DIR = r"C:\Users\jaspe\OneDrive\Desktop\Research\Projects\Sunlight_ChildObesity\derived"
+RAW_DIR = PROJECT_ROOT / "data" / "raw"
+DERIVED_DIR = PROJECT_ROOT / "data" / "derived"
+
+CENTERS_PATH = DERIVED_DIR / "sigungu2010_centers_UTMK.csv"
+SUNLIGHT_PATH = RAW_DIR / "weather" / "Sunlight_(Jun2007-Aug2011).csv"
+STATION_META_PATH = RAW_DIR / "weather" / "META_weather_station_data.csv"
+
+OUT_DIR = DERIVED_DIR
 
 # Analysis window (inclusive; date format follows YYYY-MM-DD)
 WINDOW_START = "2007-06-01"
@@ -162,7 +168,7 @@ def make_intervals(region_day: pd.DataFrame, station_col: str, dist_col: str) ->
 
 
 def main() -> None:
-    os.makedirs(OUT_DIR, exist_ok=True)
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     # ----------------------
     # Window
@@ -260,12 +266,12 @@ def main() -> None:
     # ----------------------
     # Save daily CSV (UTF-8)
     # ----------------------
-    daily_csv = os.path.join(OUT_DIR, "sigungu_daily_sunlight_20070601_20110831.csv")
+    daily_csv = OUT_DIR / "sigungu_daily_sunlight_20070601_20110831.csv"
     region_day.to_csv(daily_csv, index=False, encoding="utf-8-sig")
     print("Wrote:", daily_csv)
 
     # Daily DTA without Korean strings (safe for pandas -> Stata)
-    daily_dta = os.path.join(OUT_DIR, "sigungu_daily_sunlight_20070601_20110831.dta")
+    ddaily_dta = OUT_DIR / "sigungu_daily_sunlight_20070601_20110831.dta"
     try:
         region_day_noK = region_day.drop(columns=["resid_area"])
         region_day_noK.to_stata(daily_dta, write_index=False, version=118)
@@ -282,7 +288,7 @@ def main() -> None:
     intervals_r["method"] = "rep"
     intervals = pd.concat([intervals_c, intervals_r], ignore_index=True)
 
-    intervals_csv = os.path.join(OUT_DIR, "sigungu_station_assignment_intervals_20070601_20110831.csv")
+    intervals_csv = OUT_DIR / "sigungu_station_assignment_intervals_20070601_20110831.csv"
     intervals.to_csv(intervals_csv, index=False, encoding="utf-8-sig")
     print("Wrote:", intervals_csv)
 
@@ -298,7 +304,7 @@ def main() -> None:
                    n_days=("date", "count")
                ))
 
-    monthly_csv = os.path.join(OUT_DIR, "sigungu_monthly_sunlight_200706_201108.csv")
+    monthly_csv = OUT_DIR / "sigungu_monthly_sunlight_200706_201108.csv"
     monthly.to_csv(monthly_csv, index=False, encoding="utf-8-sig")
     print("Wrote:", monthly_csv)
 
