@@ -271,7 +271,7 @@ def main() -> None:
     print("Wrote:", daily_csv)
 
     # Daily DTA without Korean strings (safe for pandas -> Stata)
-    ddaily_dta = OUT_DIR / "sigungu_daily_sunlight_20070601_20110831.dta"
+    daily_dta = OUT_DIR / "sigungu_daily_sunlight_20070601_20110831.dta"
     try:
         region_day_noK = region_day.drop(columns=["resid_area"])
         region_day_noK.to_stata(daily_dta, write_index=False, version=118)
