@@ -90,7 +90,7 @@ Final (example):
 
 ## Software requirements
 
-- **Stata** (recommended: 17+)
+- **Stata**
 - **Python** 3.9+ with:
   - `pandas`, `numpy`, `pyproj`
   - `shapely`, `pyshp` (for polygon handling)
