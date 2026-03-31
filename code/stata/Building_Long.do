@@ -1,11 +1,9 @@
 /*************************************************************************************************************
-
 This do-file processes datasets required for the baseline analysis in the following order:
 Build KCPS long panel (waves 1-7), keep non-movers through wave 3, and drop foster children (waves 1-4)
 
-Inputs: w1(2008).dta ... w7(2014).dta	(in ${PROJROOT}/data/raw)
-Output:  KCPS_long_w1to7_nomove_until_w3_dropfoster.dta (in ${PROJROOT}/data/derived)
-
+Inputs: w1(2008).dta ... w7(2014).dta	(in ${RAWDATA})
+Output:  KCPS_long_w1to7_nomove_until_w3_dropfoster.dta (in ${DERIVED})
 *************************************************************************************************************/
 
 version 19.5
@@ -15,7 +13,7 @@ set maxvar 120000
 *---------------------------------------------*
 * 0) Paths: Edit ONLY this section				      
 *---------------------------------------------*
-global PROJROOT "C:/Users/jaspe/OneDrive/Desktop/Research/Projects/Early-life_Sunlight_Child_Obesity"
+global PROJROOT "C:/Users/jaspe/OneDrive/Desktop/Research/Projects/Sunlight_ChildObesity"
 
 global CODE        "${PROJROOT}/code"
 global RAWDATA     "${PROJROOT}/data/raw"
@@ -48,7 +46,7 @@ foreach f of local files {
     local ++W
 
     * Load wave file
-    use "${RAW}/`f'", clear
+    use "${RAWDATA}/`f'", clear
     gen wave = `W'
 
     * Pick the district variable for this wave
