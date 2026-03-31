@@ -95,8 +95,6 @@ Final (example):
   - `pandas`, `numpy`, `pyproj`
   - `shapely`, `pyshp` (for polygon handling)
 
-> Reproducibility tip: add an `environment.yml` (conda) or `requirements.txt` (pip) once you finalize your environment.
-
 ---
 
 ## How to run
