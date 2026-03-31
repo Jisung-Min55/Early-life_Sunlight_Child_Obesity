@@ -1,7 +1,7 @@
 # Data Construction Pipeline: PSKC Panel × City/County/District(SIGUNGU) Centers × KMA Weather Matching
 
 This repository reproduces the data construction pipeline for my project
-**“The Impact of Early-life Sunlight Exposure on Child Obesity”** using:
+**“The Impact of Early-life Sunlight Exposure on Childhood Obesity”** using:
 
 - **PSKC** (Panel Study on Korean Children) microdata
 - **Korean administrative boundaries** (City/County/District(SIGUNGU) polygons)
