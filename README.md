@@ -1,11 +1,21 @@
-# Data Construction Pipeline: PSKC Panel × SIGUNGU Centers × KMA Weather Matching
+# Data Construction Pipeline: PSKC Panel × City,County,District(SIGUNGU) Centers × KMA Weather Matching
 
 This repository reproduces the data construction pipeline for my project
 **“The Impact of Early-life Sunlight Exposure on Child Obesity”** using:
 
 - **PSKC** (Panel Study on Korean Children) microdata
-- **Korean administrative boundaries** (SIGUNGU polygons)
-- **Korea Meteorological Administration** (KMA) station metadata + daily sunshine (일조시간) records
+- **Korean administrative boundaries** (City,County,District(SIGUNGU) polygons)
+- **Korea Meteorological Administration** (KMA) station metadata + daily sunshine records
+
+## Main tasks
+- Construct region-level geographic reference points
+- Assign each region to the nearest active weather station by day
+- Merge weather exposure data into the child-level PSKC panel
+- Build analysis-ready exposure measures
+
+## Main tools
+- Python: geospatial processing, station assignment, exposure construction
+- Stata: panel construction, merging, sample restrictions, final analysis datasets
 
 > **Data note:** PSKC and KMA raw files are **not** redistributed in this repository.  
 > The pipeline can be reproduced by downloading the data from the official portals (registration, acceptance of the providers’ terms, submitting a proposal and such may be required) and placing the inputs in data/raw/ as described below.
